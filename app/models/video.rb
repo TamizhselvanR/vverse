@@ -1,14 +1,14 @@
 class Video < ApplicationRecord
 
   attr_accessor :file
-  belongs_to :attachment, class_name: 'ActiveStorage::Attachment', optional: true
+  belongs_to :attachment, class_name: 'ActiveStorage::Blob', optional: true
 
   before_validation :update_attachment
 
   validates :title, presence: true
   validate :validate_file_size
   validate :validate_content_type
-  # validates :duration, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 300 }
+  validates :duration, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 300 }
 
   private
 
@@ -20,6 +20,15 @@ class Video < ApplicationRecord
       identify: false
     )
     self.attachment_id = blob.id
+    temp_dir = Rails.root.join('tmp', 'videos')
+    temp_file_path = temp_dir.join(blob.filename.to_s)
+    attachment.download do |file_content|
+      File.open(temp_file_path, 'wb') do |file|
+        file.write(file_content)
+      end
+    end
+    vid = FFMPEG::Movie.new(temp_file_path.to_s)
+    self.duration = vid.duration
   end
 
   def validate_file_size
