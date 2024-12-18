@@ -3,9 +3,12 @@ class Video < ApplicationRecord
   attr_accessor :file
   belongs_to :attachment, class_name: 'ActiveStorage::Attachment', optional: true
 
+  before_validation :update_attachment
+
   validates :title, presence: true
   validate :validate_file_size
-  before_save :update_attachment
+  validate :validate_content_type
+  # validates :duration, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 300 }
 
   private
 
@@ -17,13 +20,17 @@ class Video < ApplicationRecord
       identify: false
     )
     self.attachment_id = blob.id
-    video = FFMPEG::Movie.new(file.download)
-    self.duration = video.duration.to_i
   end
 
   def validate_file_size
     if file.present? && file.size > MAX_FILE_SIZE_MB.megabytes
       errors.add(:file, "is too large. Maximum size allowed is 25 MB.")
+    end
+  end
+
+  def validate_content_type
+    if file.present? && ALLOWED_VIDEO_CONTENT_TYPES.exclude?(file.content_type)
+      errors.add(:file, "has an invalid content type. Allowed types are: #{ALLOWED_VIDEO_CONTENT_TYPES.join(', ')}.")
     end
   end
 end
