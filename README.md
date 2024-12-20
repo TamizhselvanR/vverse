@@ -1,24 +1,46 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API server setup:
 
-Things you may want to cover:
+Download brew:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-* Ruby version
+on succesive install of brew well see these commands, we have to run them
+echo >> /Users/tamizh/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/tamizh/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-* System dependencies
+Install Rbenv to install ruby
+brew install rbenv
+rbenv instal 3.3.0
+rbenv global 3.3.0
 
-* Configuration
+copy below to ~bash_profile
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
-* Database creation
+brew install redis
+brew install ffmpeg
 
-* Database initialization
+Move to vverse repo
+sudo gem install bundler
+bundle i
 
-* How to run the test suite
+rails active_storage:install 
+rails db:migrate
 
-* Services (job queues, cache servers, search engines, etc.)
+Starting redis and rails server:
 
-* Deployment instructions
+brew services start redis
+bundle exec rails s
 
+
+Troubleshooting:
+
+In anycase when 
+sudo gem install bundler or
+bundle i
+fails try running this below commands and chck ruby version it should be 3.3.0
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 * ...
