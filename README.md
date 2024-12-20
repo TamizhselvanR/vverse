@@ -1,6 +1,6 @@
 # README
 
-API server setup:
+**API server setup:**
 
 Download brew:
 ```bash
