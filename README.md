@@ -3,7 +3,9 @@
 API server setup:
 
 Download brew:
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
 on succesive install of brew well see these commands, we have to run them
 echo >> /Users/tamizh/.zprofile
