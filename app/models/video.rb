@@ -8,14 +8,14 @@ class Video < ApplicationRecord
   validates :title, presence: true
   validate :validate_file_size
   validate :validate_content_type
-  validates :duration, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 300 }
+  validates :duration, numericality: { greater_than_or_equal_to: MIN_DURATION, less_than_or_equal_to: MAX_DURATION }
 
   private
 
   def update_attachment
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
-      filename: title,
+      filename: "#{title}.mp4",
       content_type: content_type || file.content_type,
       identify: false
     )
