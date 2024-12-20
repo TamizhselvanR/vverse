@@ -3,6 +3,7 @@ class VideosController < ApplicationController
   before_action :validate_file_size, only: [:create]
   before_action :validate_trim_params, only: [:trim]
   before_action :validate_merge_params, only: [:merge]
+  before_action :authenticate_request, only: [:create, :show, :trim, :merge]
 
   def create
     video = Video.new(video_params)
@@ -102,6 +103,15 @@ class VideosController < ApplicationController
 
     if start_time < 0 || end_time <= start_time
       render json: { error: 'Invalid start_time or end_time' }, status: :unprocessable_entity and return
+    end
+  end
+
+  def authenticate_request
+    provided_key = request.headers['Authorization']
+    static_key = $auth_key
+
+    unless provided_key.present? && ActiveSupport::SecurityUtils.secure_compare(provided_key, static_key)
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
 end
