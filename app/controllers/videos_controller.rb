@@ -13,10 +13,8 @@ class VideosController < ApplicationController
     end
   end
 
-  def show
-    key = SecureRandom.hex(16)
-    $redis_client.set(key, @video.id, ex: DOWNLOAD_EXPIRY)
-    render json: { video: @video, download_url: "#{request.base_url}/videos/download?video=#{key}" }, status: :ok
+  def show    
+    render json: { video: @video, download_url: download_url(@video) }, status: :ok
   end
 
   def trim
@@ -27,18 +25,28 @@ class VideosController < ApplicationController
     }
     result = VideoManipulator.new(video_params).trim
     if result
-      render json: { message: 'Video trimmed successfully' }, status: :ok
+      render json: {
+        message: 'Video trimmed successfully',
+        video: @video,
+        download_url: generate_download_url(@video)
+      }, status: :ok
     else
       render json: { error: 'Failed to trim video' }, status: :unprocessable_entity
     end
   end
 
   def merge
-    result = VideoManipulator.new({ video1: @video1, video2: @video2 }).merge
-    if result
-      render json: { message: 'Videos merged successfully' }, status: :ok
+    video = VideoManipulator.new({ video1: @video1, video2: @video2 }).merge
+    if video.errors.full_messages.empty?
+      render json: {
+        message: 'Videos merged successfully',
+        video: video,
+        download_url: generate_download_url(video)
+      }, status: :ok
     else
-      render json: { error: 'Failed to merge videos' }, status: :unprocessable_entity
+      render json: {
+        error: "Failed to merge videos: #{video.errors.full_messages.first}"
+      }, status: :unprocessable_entity
     end
   end
 
@@ -61,6 +69,21 @@ class VideosController < ApplicationController
 
   private
 
+
+  def load_file
+    @video = Video.find_by_id(params[:id])
+
+    if @video.nil?
+      render json: { error: 'Video unavailable' }, status: :unprocessable_entity and return
+    end
+  end
+
+  def generate_download_url(video)
+    key = SecureRandom.hex(16)
+    $redis_client.set(key, video.id, ex: DOWNLOAD_EXPIRY)
+    "#{request.base_url}/videos/download?video=#{key}"
+  end
+
   def video_params
     params.require(:video).permit(:title, :file)
   end
@@ -76,14 +99,6 @@ class VideosController < ApplicationController
       end
     else
       render json: { error: 'No file uploaded' }, status: :unprocessable_entity
-    end
-  end
-
-  def load_file
-    @video = Video.find_by_id(params[:id])
-
-    if @video.nil?
-      render json: { error: 'Video unavailable' }, status: :unprocessable_entity and return
     end
   end
 
