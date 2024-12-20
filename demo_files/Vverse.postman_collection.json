@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "2284fbe6-28a3-4900-a806-e1d09b81f71b",
+		"name": "Vverse",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12993524"
+	},
+	"item": [
+		{
+			"name": "Upload Video",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "5a20a05d699392cee13410f0bf7af06e"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "video[title]",
+							"value": "Sample Video",
+							"type": "text"
+						},
+						{
+							"key": "video[file]",
+							"type": "file",
+							"src": "/Users/tamizhselvanr/Desktop/15 Second Countdown Timer.mp4"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/videos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"videos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trim Video",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "5a20a05d699392cee13410f0bf7af06e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"start_time\": 5,\n    \"end_time\": 15\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/videos/49/trim",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"videos",
+						"49",
+						"trim"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Video details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "5a20a05d699392cee13410f0bf7af06e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"start_time\": 2,\n    \"end_time\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/videos/36/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"videos",
+						"36",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Merge videos",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "5a20a05d699392cee13410f0bf7af06e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"video1_id\": 48,\n    \"video2_id\": 49\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/videos/merge",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"videos",
+						"merge"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
