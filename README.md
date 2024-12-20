@@ -11,8 +11,11 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/tamizh/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 Install Rbenv to install ruby
+
 brew install rbenv
+
 rbenv instal 3.3.0
+
 rbenv global 3.3.0
 
 copy below to ~bash_profile
