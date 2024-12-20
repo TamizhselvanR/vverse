@@ -1,8 +1,8 @@
 # README
 
-**API server setup:**
+## API server setup:
 
-Download brew:
+**Download brew:**
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
