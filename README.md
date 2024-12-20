@@ -53,7 +53,7 @@ brew services start redis
 bundle exec rails s
 ```
 
-Troubleshooting:
+## Troubleshooting:
 
 In anycase when 
 
@@ -67,12 +67,12 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 ```
 
-Demo and recording:
+## Demo Files
 
-Have added the Postman collection and a Sample video here
-```bash
-https://github.com/TamizhselvanR/vverse/tree/main/demo_files 
-```
+I've added the Postman collection and a sample video in the `demo_files` directory. You can access them here:
+
+- [Postman Collection and Sample Video](https://github.com/TamizhselvanR/vverse/tree/main/demo_files)
+
 
 Link to the demo showcasing the feature in action :- https://drive.google.com/file/d/1RzPHk_gMc2dWvi1HdKe1yaZGG7UtkhPh/view?usp=sharing
 * ...
