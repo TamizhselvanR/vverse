@@ -66,4 +66,13 @@ fails try running this below commands and chck ruby version it should be 3.3.0
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 ```
+
+Demo and recording:
+
+Have added the Postman collection and a Sample video here
+```bash
+https://github.com/TamizhselvanR/vverse/tree/main/demo_files 
+```
+
+Link to the demo showcasing the feature in action :- https://drive.google.com/file/d/1RzPHk_gMc2dWvi1HdKe1yaZGG7UtkhPh/view?usp=sharing
 * ...
