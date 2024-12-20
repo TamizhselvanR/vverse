@@ -1,6 +1,6 @@
 class Video < ApplicationRecord
 
-  attr_accessor :file
+  attr_accessor :file, :content_type
   belongs_to :attachment, class_name: 'ActiveStorage::Blob', optional: true
 
   before_validation :update_attachment
@@ -15,8 +15,8 @@ class Video < ApplicationRecord
   def update_attachment
     blob = ActiveStorage::Blob.create_and_upload!(
       io: file,
-      filename: file.original_filename,
-      content_type: file.content_type,
+      filename: title,
+      content_type: content_type || file.content_type,
       identify: false
     )
     self.attachment_id = blob.id
@@ -38,7 +38,7 @@ class Video < ApplicationRecord
   end
 
   def validate_content_type
-    if file.present? && ALLOWED_VIDEO_CONTENT_TYPES.exclude?(file.content_type)
+    if file.present? && ALLOWED_VIDEO_CONTENT_TYPES.exclude?(content_type || file.content_type)
       errors.add(:file, "has an invalid content type. Allowed types are: #{ALLOWED_VIDEO_CONTENT_TYPES.join(', ')}.")
     end
   end

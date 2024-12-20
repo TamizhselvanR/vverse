@@ -7,9 +7,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  resources :videos, only: [:create] do
+  resources :videos, only: [:create, :show] do
     member do
       post :trim
+    end
+    collection do
+      post :merge
       get :download
     end
   end

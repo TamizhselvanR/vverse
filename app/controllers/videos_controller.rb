@@ -1,7 +1,8 @@
 class VideosController < ApplicationController
-  before_action :load_file, only: [:trim, :download]
+  before_action :load_file, only: [:trim, :show]
   before_action :validate_file_size, only: [:create]
   before_action :validate_trim_params, only: [:trim]
+  before_action :validate_merge_params, only: [:merge]
 
   def create
     video = Video.new(video_params)
@@ -10,6 +11,12 @@ class VideosController < ApplicationController
     else
     render json: { errors: video.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def show
+    key = SecureRandom.hex(16)
+    $redis_client.set(key, @video.id, ex: DOWNLOAD_EXPIRY)
+    render json: { video: @video, download_url: "#{request.base_url}/videos/download?video=#{key}" }, status: :ok
   end
 
   def trim
@@ -26,11 +33,25 @@ class VideosController < ApplicationController
     end
   end
 
+  def merge
+    result = VideoManipulator.new({ video1: @video1, video2: @video2 }).merge
+    if result
+      render json: { message: 'Videos merged successfully' }, status: :ok
+    else
+      render json: { error: 'Failed to merge videos' }, status: :unprocessable_entity
+    end
+  end
+
   def download
+    key = params[:video]
+    @video = Video.find_by_id($redis_client.get(key))
+    if @video.nil?
+      render json: { error: 'Video unavailable to download' }, status: :unprocessable_entity and return
+    end
     attachment = @video.attachment
     if attachment.present?
       send_data attachment.download,
-                filename: attachment.filename.to_s,
+                filename: "#{@video.title}.mp4",
                 content_type: attachment.content_type,
                 disposition: 'attachment'
     else
@@ -63,6 +84,15 @@ class VideosController < ApplicationController
 
     if @video.nil?
       render json: { error: 'Video unavailable' }, status: :unprocessable_entity and return
+    end
+  end
+
+  def validate_merge_params
+    @video1 = Video.find_by(id: params[:video1_id])
+    @video2 = Video.find_by(id: params[:video2_id])
+
+    if @video1.nil? || @video2.nil?
+      return render json: { error: 'One or both videos not found' }, status: :not_found
     end
   end
 
