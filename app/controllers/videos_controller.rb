@@ -7,9 +7,9 @@ class VideosController < ApplicationController
   def create
     video = Video.new(video_params)
     if video.save
-    render json: { message: 'Video uploaded successfully', video: video }, status: :created
+      render json: { message: 'Video uploaded successfully', video: video }, status: :created
     else
-    render json: { errors: video.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: video.errors.full_messages.first }, status: :unprocessable_entity
     end
   end
 

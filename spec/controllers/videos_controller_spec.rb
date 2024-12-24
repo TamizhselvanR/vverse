@@ -46,6 +46,17 @@ RSpec.describe VideosController, type: :controller do
         expect(JSON.parse(response.body)['error']).to eq('No file uploaded')
       end
     end
+
+    context 'when file format is wrong' do
+      let(:dummy_file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'jc.jpeg'), 'image/jpg') }
+
+      it 'returns an error message' do
+        post :create, params: { video: { title: 'Test File',  file: dummy_file } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        message = 'File has an invalid content type. Allowed types are: video/mp4, video/avi, video/mkv, video/webm, video/quicktime.'
+        expect(JSON.parse(response.body)['error']).to eq(message)
+      end
+    end
   end
 
   describe 'GET #show' do
