@@ -67,6 +67,41 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 ```
 
+## Test cases:
+
+To run test follow the below commands:
+
+run
+```bash
+bundle i
+```
+to install rspec-rails gem which will help in running test cases
+
+To run the controller test file, do
+```bash
+bundle exec bundle exec rspec spec/controllers/videos_controller_spec.rb
+```
+
+Once tests are executed we will see a dir location like below, which will have coverage details
+```bash
+Coverage report generated for RSpec to /Users/tamizhselvanr/Documents/assigments/vverse/coverage.
+Line Coverage: 92.36% (145 / 157)
+```
+
+## Troubleshooting tests
+
+If you face any issues while running like below
+```bash
+undefined method `fixture_path=' for class RSpec::ExampleGroups:
+```
+try below commands and run tests again
+```bash
+rm Gemfile.lock
+bundle install
+bundle exec bundle exec rspec spec/controllers/videos_controller_spec.rb
+```
+
+
 ## Demo Files
 
 I've added the Postman collection and a sample video in the `demo_files` directory. You can access them here:

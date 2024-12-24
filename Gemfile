@@ -3,6 +3,12 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.0"
 gem 'redis'
+gem 'rspec-rails'
+
+group :test do
+  gem 'simplecov', require: false
+end
+
 # Use sqlite3 as the database for Active Record
 gem "sqlite3", ">= 2.1"
 gem 'streamio-ffmpeg' # For video trimming and merging

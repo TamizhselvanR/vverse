@@ -27,7 +27,7 @@ class VideoManipulator
     Rails.logger.error("Video trimming failed: #{e.message}")
     nil
   ensure
-    File.delete(output_path) if File.exist?(output_path)
+    File.delete(output_path) if output_path.present? && File.exist?(output_path)
   end
 
   def merge

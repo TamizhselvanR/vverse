@@ -7,14 +7,14 @@ class VideosController < ApplicationController
   def create
     video = Video.new(video_params)
     if video.save
-    render json: { message: 'Video uploaded successfully', video: video }, status: :created
+      render json: { message: 'Video uploaded successfully', video: video }, status: :created
     else
-    render json: { errors: video.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: video.errors.full_messages.first }, status: :unprocessable_entity
     end
   end
 
-  def show    
-    render json: { video: @video, download_url: download_url(@video) }, status: :ok
+  def show
+    render json: { video: @video, download_url: generate_download_url(@video) }, status: :ok
   end
 
   def trim
@@ -115,7 +115,7 @@ class VideosController < ApplicationController
     start_time = params[:start_time].to_f
     end_time = params[:end_time].to_f
 
-    if start_time < 0 || end_time <= start_time
+    if start_time < 0 || end_time <= start_time || end_time > @video.duration
       render json: { error: 'Invalid start_time or end_time' }, status: :unprocessable_entity and return
     end
   end
