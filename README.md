@@ -90,7 +90,7 @@ Line Coverage: 92.36% (145 / 157)
 
 ## Troubleshooting tests
 
-If you face any issues while running like below
+If you face any issues while running tests similar to below one
 ```bash
 undefined method `fixture_path=' for class RSpec::ExampleGroups:
 ```
